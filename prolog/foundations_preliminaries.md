@@ -17,9 +17,11 @@
 > * [Definition Model](#model)
 > * [Definition Logical Consequence](#consequence)
 > * [Proposition Unsatisfiability](#unsatisfiability)
-> * [Definition Logical Equivalence](#equivalence)
+> * [Definition Logical Equivalences](#equivalence)
 
 ## 4. [Logical Inference](#sec4)
+
+> * [Definition Soundness and Completeness](#soundness)
 
 ## 5. [Substitutions](#sec5)
 
@@ -123,7 +125,7 @@ Some terminologies
 >     *  either if the occurrence follows directly after a quantifier($\forall, \exist$) ;
 >     * or if it appears inside the subformula which follows directly after "$\forall X$" or "$\exist X$". 
 >   * Otherwise the occurrence is said to be `free`.
-> * A formula with no free occurrences of variables is said to be `closed`.
+> * **A formula with no free occurrences of variables is said to be `closed`.**
 > * A formula/term which contains no variables is called `ground`.
 > * Let $X_1, ..., X_n$ be all variables that occur free in a formula $F$.
 >   * The closed formula of the form $\forall X_1(...(\forall X_n F))$ is called the `universal closure` of $F$ and is denoted $\forall F$.
@@ -170,27 +172,129 @@ Let $I$ be an interpretation, $\varphi$ a valuation and $Q$ a formula. The meani
 
 ## <a name='sec3'>Models and Logical Consequence</a>
 
+Given a set of closed formulas *P* and an interpretation *I* is natural to ask whether the formulas of *P* give a proper account of this world. This is the case if all formulas of *P* are true in *I*.
+
 ### <a name='model'>Def. Model</a>
 
 An interpretation $I$ is said to be a `model` of *P* iff every formula of *P* is true in $I$.
 
-
+Clearly *P* has infinitely many interpretations. However, it may happen that none of them is a model of *P*. A trivial example is any *P* that includes the formula ($F \land \neg F$) where *F* is an arbitrary (closed) formula. Such sets of formulas are called *unsatisfiable*.
 
 ### <a name='consequence'>Def. Logical consequence</a>
 
+Our intention is to use the description of the world of interest to obtain more information about this world. This new information is to ***represented by new formulas not explicitly included in the original description.***
+
+For a given set *P* of formulas other formulas (say *F*) which are also true in the world described by *P* are searched for. Unfortunately, *P* itself has many models and does not uniquely identify the 'intended model' which was described by *P*. Therefore it must be required that *F* is true in every model of *P* to guarantee that it is also true in the particular world of interest.
+
 Let *P* be a set of closed formulas. A closed formula *F* is called a logical consequence of *P* (denoted $P\models F$) iff *F* is true in every model of *P*.
 
+### **<a name='unsatisfiability'>Prop. Unsatisfiability</a>**
 
+**Let *P* be a set of closed formulas and *F* a closed formula. Then $P\models F$ iff $P \cup {\neg F}$ is unsatisfiable.**
 
-### <a name='unsatisfiability'>Prop. Unsatisfiability</a>
+e.g.:
 
-Let *P* be a set of closed formulas and *F* a closed formula. Then $P\models F$ iff $P \cup {\neg F}$ is unsatisfiable.
-
-
+> * $\neg\neg F \equiv F$
+>
+> * $F \supset G \equiv \neg F \lor G$
+>
+> * $F \supset G \equiv \neg G \supset \neg F$
+>
+> * $F \iff G \equiv (F\supset G) \land (G\supset F)$
+>
+> * $\neg (F \land G) \equiv \neg F \lor \neg G$     DeMorgan's law
+>
+> * $\neg(F \lor G) \equiv \neg F \land G$        DeMorgan's law
+>
+> * $\neg\forall XH(X) \equiv \exist X \neg H(X)$ DeMorgan's law
+>
+> * $\neg \exist XH(X) \equiv \forall X \neg H(X)$ DeMorgan's law
+>
+>   
 
 ### <a name='equivalence'>Def. Logical equivalence</a>
 
 Two formulas *F* and *G* are said to be logically equivalent (denoted $F \equiv G$) iff *F* and *G* have the same truth value for all interpretations *I* and valuations $\varphi$.
 
+e.g.:
+
+> - $\neg\neg F \equiv F$
+> - $F\supset G \equiv \neg F \lor G$
+> - $F \supset G \equiv \neg G \supset \neg F$
+> - $F \iff G \equiv (F \supset G) \land (G \supset F)$
+> - $\neg (F \lor G) \equiv \neg F \land \neg G$        DeMorgan's law
+> - $\neg(F \land G) \equiv \neg F \lor \neg G$        DeMorgan's law
+> - $\neg \forall XH(X) \equiv \exist  X \neg H(X)$   DeMorgan's law
+> -  $\neg \exist XH(X) \equiv \forall X \neg H(X)$  DeMorgan's law
+> - if there are no free occurrence of *X* in  *F* then:
+>   - $\forall X(F \lor H(X)) \equiv F \lor \forall XH(X)$
+
 ## <a name='sec4'>Logical Inference</a>
+
+> * Premises
+>
+>   (1) $\forall$X ($\forall$Y (mother(X) $\land$ child_of(Y, X)) $\supset$ loves(X, Y)) 
+>
+>   (2) mother(mary) $\land$ child_of(tom, mary)
+>
+> * Conclusion
+>
+>   (3) loves(mary, tom)
+
+With this formalization, reasoning can be seen as a process of manipulation of formulas, which from a given set of formulas, like (1) and (2), called the *premises*, produces a new formula called the *conclusion*, for instance (3).
+
+An inference rule satisfying the following requirement is said to be `sound`: whenever the premises are true in any world under consideration, any conclusion obtained by application of an inference rule should also be true in this world.
+
+Among well-known inference rules of predicate logic the following are frequently used:
+
+* **Modus ponens or elimination rule for implication**
+
+  This rule says that whenever formulas of the form *F* and ($F\supset G$) belong to or are concluded from a set of premises, *G* can be inferred. This rule is often presented as follows:
+
+  ##                            $\frac{F F\supset G}{G} (\supset E)$
+
+* **Elimination rule for universal quantifier**
+
+  This rule says that whenever a formula of the form ($\forall XF$) belongs to or is concluded from the premises a new formula can be concluded by replacing all free occurrences of *X* in *F* by some term *t* which is *free* for *X* (that is, all variables in *t* remain free when *X* is replaced by *t*). This rule is often presented as follows:
+
+  ###                           $\frac{\forall XF(X)}{F(t)} (\forall E)$
+
+* **Introduction rule for conjunction**
+
+  This rule states that if formulas *F* and *G* belong to or are concluded form the premises then the conclusion $F\land G$ can be inferred. This is often stated as follows:
+
+  ##                               $\frac{F G}{F\land G} (\land I)$ 
+
+e.g.
+
+> (a) $\forall$X ($\forall$Y (mother(X) $\land$ child_of(Y, X)) $\supset$ loves(X, Y)) 
+>
+> (b) mother(mary) $\land$ child_of(tom, mary)
+>
+> 
+>
+> => Elimination rule for universal quantifier in (a) yields:
+>
+> (c) $\forall Y (mother(mary)) \land child\_of(Y, mary) \supset loves(mary, Y)$
+>
+> 
+>
+> => Elimination rule of the universal quantifier in (c) yields:
+>
+> (d) $mother(mary) \land child\_of(tom, mary) \supset loves(mary, tom)$
+>
+> 
+>
+> => Modus ponens applied to (b) and (d) yields:
+>
+> (e) $loves(mary, tom)$
+
+Thus the conclusion (e) has been produced in a formal way by application of the inference rules.
+
+Any formula *F* that can be obtained in that way from a given set *P* of premises is said to be `derivable` from *P*. **This is denoted by $P \vdash F$**.
+
+### <a name='soundness'>Def. Soundness and Completeness</a>
+
+A set of inference rules are said to be `sound` if, for every set of closed formulas *P* and every closed formula *F*, whenever $P \vdash F$ it holds that $P \models F$. The inference rules are `complete` if $P \vdash F$ whenever $P\models F$.
+
 ## <a name='sec5'>Substitutions</a>
