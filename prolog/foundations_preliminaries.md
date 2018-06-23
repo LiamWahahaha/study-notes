@@ -25,6 +25,12 @@
 
 ## 5. [Substitutions](#sec5)
 
+> * [Definition Substitutions](#substitutions)
+> * [Definition Application](#application)
+> * [Definition Composition](#composition)
+> * [Definition Idempotent Substitution](#idempotent)
+> * [Proposition Properties of Substitutions](#propofsubstitute)
+
 ---
 
 ## <a name='sec1'>Logic Formulas</a>
@@ -298,3 +304,63 @@ Any formula *F* that can be obtained in that way from a given set *P* of premise
 A set of inference rules are said to be `sound` if, for every set of closed formulas *P* and every closed formula *F*, whenever $P \vdash F$ it holds that $P \models F$. The inference rules are `complete` if $P \vdash F$ whenever $P\models F$.
 
 ## <a name='sec5'>Substitutions</a>
+
+Formally a substitution is a mapping from variables of a given alphabet to terms in this alphabet.
+
+### <a name='substitutions'>Def. Substitutions</a>
+
+A *substituion* is a finite set of pairs of terms {$X_1/t_1, ..., X_n/t_n$} where each $t_i$ is a term and each $X_i$ a variable such that $X_i \not = t_i$ and $X_i \not = X_j$ if $i \not = j$. The *empty substitution* is denoted $\epsilon$.
+
+###  <a name='application'>Def. Application</a>
+
+Let $\theta$ be a substitution  {$X_1/t_1, ..., X_n/t_n$} and $E$ a term or a formula. The application $E\theta$ of $\theta$ to $E$ is the term/formula obtained by simultaneously replacing $t_i$ for every free occurence of $X_i$ in X ($1\leq i \leq n$). $E\theta$ is called an *instance* of *E*.
+
+The *application* $X\theta$ of a substitution $\theta$ to a variable $X$ is defined as follows:
+
+​		 $X\theta := $
+
+​			if $X/t \in \theta$:
+
+​                                  $X \theta := t $
+
+ 			otherwise:
+
+​				 $X \theta := X$
+
+in what follows let $Dom(\{ X_1/t_1, ..., X_n/t_n\})$ denote the set $\{X_1, ..., X_n\}$. Also let $Range(\{X_1/t_1, ..., X_n/t_n\})$ be the set of all variables in $t_1,..., t_n$. Thus, for variables not included in $Dom(\theta)$, $\theta$ behaves as the identity mapping. It is natural to extend the domain of substitutions to include also terms and formulas.
+
+e.g. $p(f(X,Z), f(Y,a))\{X/a, Y/z, W/b\} = p(f(a,Z), f(Z,a))$
+
+e.g. $p(X,Y){X/f(Y), Y/b}=p(f(Y), b)$
+
+### <a name='composition'>Def. Composition</a>
+
+Let $\theta$ and $\sigma$ be two substitutions:
+
+​                                     $\theta := \{ X_1/s_1, ..., X_m/s_m\}$
+
+​                                     $\sigma :=\{Y_1/t_1, ..., Y_n/t_n\}$
+
+The *composition* $\theta\sigma$ of $\theta$ and $\sigma$ is obtained from the set:
+
+​                                    $\{X_1/s1\sigma, ...,X_m/s_m\sigma, Y_1/t_1, ..., Y_n/t_n\}$
+
+by removing all $X_i/s_i\sigma$ for which $X_i=s_i\sigma(1\leq i \leq m)$ and by removing those $Y_j/t_j$ for which $Y_j \in \{X_1, ..., X_m\} (1\leq j \leq n)$.
+
+### <a name='idempotent'>Def. Idenpotent Substitution</a>
+
+A substitution $\theta$ is said to be *idempotent* iff $\theta=\theta\theta$
+
+It can be shown that a substitution $\theta$ is 
+
+​                        $idemptoent\iff Dom(\theta) \cap Range(\theta)=\phi$.
+
+### <a name='propofsubstitute'>Prop. Properties of Substitutions</a>
+
+Let $\theta, \sigma$ and $\gamma$ be substitutions and let *E* be a term or a formula. Then:
+
+* $E(\theta\sigma)=(E\theta)\sigma$
+* $(\theta\sigma)\gamma=\theta(\sigma\gamma)$
+* $\epsilon\theta=\theta\epsilon=\theta$
+
+<u>**Notice that composition of substitutions is not commutative.**</u>
