@@ -263,13 +263,13 @@ Among well-known inference rules of predicate logic the following are frequently
 
   This rule says that whenever a formula of the form ($\forall XF$) belongs to or is concluded from the premises a new formula can be concluded by replacing all free occurrences of *X* in *F* by some term *t* which is *free* for *X* (that is, all variables in *t* remain free when *X* is replaced by *t*). This rule is often presented as follows:
 
-  ###                           $\frac{\forall XF(X)}{F(t)} (\forall E)$
+  ###                                 $\frac{\forall XF(X)}{F(t)} (\forall E)$
 
 * **Introduction rule for conjunction**
 
   This rule states that if formulas *F* and *G* belong to or are concluded form the premises then the conclusion $F\land G$ can be inferred. This is often stated as follows:
 
-  ##                               $\frac{F G}{F\land G} (\land I)$ 
+  ##                              $\frac{F G}{F\land G} (\land I)$ 
 
 e.g.
 
